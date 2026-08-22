@@ -12,6 +12,7 @@
             --text-light: #f8f9fa;
             --text-dim: #a0aec0;
             --border-color: #2d3748;
+            --badge-red: #d32f2f;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -41,6 +42,26 @@
 
         .qr-section { text-align: center; margin: 15px 0; background: #0b0f19; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); }
         .qr-img { width: 220px; border-radius: 8px; margin: 10px 0; border: 2px solid var(--primary); }
+
+        /* PLAYER PASS CARD STYLES */
+        .pass-card { background: #111625; border: 1px solid #2a3447; border-radius: 16px; padding: 25px 20px; text-align: center; position: relative; }
+        .pass-header { color: var(--primary); font-size: 20px; font-weight: bold; letter-spacing: 0.5px; }
+        .pass-sub { font-size: 12px; color: var(--text-dim); margin-bottom: 15px; }
+        .badge { background: var(--badge-red); color: white; display: inline-block; padding: 6px 18px; border-radius: 20px; font-weight: bold; font-size: 12px; letter-spacing: 1px; margin-bottom: 20px; }
+        
+        .profile-ring { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--primary); margin: 0 auto 12px; overflow: hidden; background: #1c263d; display: flex; align-items: center; justify-content: center; }
+        .profile-ring img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .player-title { font-size: 22px; font-weight: bold; color: white; text-transform: uppercase; letter-spacing: 1px; }
+        .player-city { font-size: 14px; color: var(--text-dim); margin-bottom: 20px; }
+
+        .pass-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 10px; text-align: left; background: #0a0d16; padding: 15px; border-radius: 10px; border: 1px solid #1f293d; margin-bottom: 20px; }
+        .pass-item label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; display: block; margin-bottom: 2px; }
+        .pass-item div { font-size: 14px; font-weight: bold; color: white; }
+
+        .pass-footer { margin-top: 15px; border-top: 1px solid #1f293d; padding-top: 12px; }
+        .pass-footer h4 { color: var(--primary); font-size: 14px; margin-bottom: 4px; }
+        .pass-footer p { font-size: 11px; color: var(--text-dim); }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -86,27 +107,60 @@
             <form action="https://formspree.io/f/xkjwevwz" method="POST" id="regForm">
                 
                 <div class="form-group">
-                    <label>Choose Registration Type *</label>
+                    <label>Registration Category *</label>
                     <select name="Registration_Type" id="regType" required>
-                        <option value="Senior Player (₹450)">Player Registration: Senior - ₹450</option>
-                        <option value="Junior Player (₹400)">Player Registration: Junior - ₹400</option>
-                        <option value="Team Entry (₹15,000)">Team Entry (16 Teams Battle) - ₹15,000</option>
+                        <option value="Senior Player (₹450)">Senior Player - ₹450</option>
+                        <option value="Junior Player (₹400)">Junior Player - ₹400</option>
+                        <option value="Team Entry (₹15,000)">Team Entry - ₹15,000</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Full Name / Franchise Name *</label>
+                    <label>Full Name *</label>
                     <input type="text" name="Name" id="pName" required placeholder="Enter full name">
                 </div>
 
                 <div class="form-group">
-                    <label>WhatsApp Phone Number *</label>
+                    <label>WhatsApp Number *</label>
                     <input type="tel" name="Phone" id="pPhone" required placeholder="10 digit phone number">
                 </div>
 
                 <div class="form-group">
                     <label>City / Location *</label>
                     <input type="text" name="City" id="pCity" required placeholder="e.g. Patharia">
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Player Photo *</label>
+                    <input type="file" id="pPhotoInput" accept="image/*" required style="padding: 8px;">
+                </div>
+
+                <div class="form-group">
+                    <label>Player Role *</label>
+                    <select name="Player_Role" id="pRole" required>
+                        <option value="All-rounder">All-rounder</option>
+                        <option value="Batsman">Batsman</option>
+                        <option value="Bowler">Bowler</option>
+                        <option value="Wickets Keeper">Wickets Keeper</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Batting Style *</label>
+                    <select name="Batting_Style" id="pBatting" required>
+                        <option value="Right-Handed">Right-Handed</option>
+                        <option value="Left-Handed">Left-Handed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Bowling Style *</label>
+                    <select name="Bowling_Style" id="pBowling" required>
+                        <option value="Right-Arm Fast/Medium">Right-Arm Fast/Medium</option>
+                        <option value="Left-Arm Fast/Medium">Left-Arm Fast/Medium</option>
+                        <option value="Spin">Spin</option>
+                        <option value="None">None</option>
+                    </select>
                 </div>
 
                 <button type="button" class="btn" onclick="goToPayment()">Continue to Payment</button>
@@ -126,7 +180,7 @@
             </div>
 
             <div class="form-group">
-                <label>12-Digit UTR / Transaction Reference Number *</label>
+                <label>12-Digit UTR Number *</label>
                 <input type="text" id="utrInput" placeholder="Enter 12-digit UTR Number" required minlength="10" maxlength="16">
             </div>
 
@@ -135,23 +189,57 @@
                 <input type="file" id="ssInput" accept="image/*" required style="padding: 8px;">
             </div>
 
-            <button class="btn" onclick="submitFinalForm()">Submit & Verify Registration</button>
+            <button class="btn" onclick="submitFinalForm()">Generate Player Pass</button>
         </div>
     </div>
 
-    <!-- SLIDE 4: SUCCESS TOKEN -->
+    <!-- SLIDE 4: DIGITAL PLAYER PASS -->
     <div id="page4" class="page">
-        <div class="card" style="text-align: center; border: 2px dashed var(--primary);">
-            <span style="color: #4ade80; font-size: 14px;">✔ Registration Saved!</span>
-            <p style="margin-top: 10px;">Your Verification Token Number:</p>
-            <h1 id="tokenDisplay" style="font-size: 32px; letter-spacing: 2px; margin: 15px 0;">PPL-0000</h1>
+        
+        <div class="pass-card" id="playerPassCard">
+            <div class="pass-header">PATHARIA PREMIER LEAGUE</div>
+            <div class="pass-sub">Auction Base Tournament</div>
             
-            <p style="font-size: 12px; color: #ffc107; margin-bottom: 10px;">⚠️ Final Step: Send payment screenshot on WhatsApp to verify your entry.</p>
-            
-            <a id="waBtn" href="#" target="_blank" class="btn-wa">📲 Send Screenshot on WhatsApp</a>
+            <div class="badge">APPROVED PLAYER</div>
 
-            <button class="btn" onclick="showPage(1)" style="margin-top: 15px; background: transparent; color: #a0aec0; border: 1px solid #333;">Back to Home</button>
+            <div class="profile-ring">
+                <img id="passPhoto" src="" alt="Player Photo">
+            </div>
+
+            <div class="player-title" id="passName">PLAYER NAME</div>
+            <div class="player-city" id="passCity">City</div>
+
+            <div class="pass-grid">
+                <div class="pass-item">
+                    <label>TOKEN NUMBER</label>
+                    <div id="passToken" style="color: var(--primary);">PPL-0000</div>
+                </div>
+                <div class="pass-item">
+                    <label>PLAYER ROLE</label>
+                    <div id="passRole">All-rounder</div>
+                </div>
+                <div class="pass-item">
+                    <label>BATTING STYLE</label>
+                    <div id="passBatting">Right-Handed</div>
+                </div>
+                <div class="pass-item">
+                    <label>BOWLING STYLE</label>
+                    <div id="passBowling">Medium</div>
+                </div>
+            </div>
+
+            <div class="pass-footer">
+                <h4>Play Hard, Win Big</h4>
+                <p>Organizer: Viru Ven • 9074534603</p>
+            </div>
         </div>
+
+        <div style="margin-top: 15px;">
+            <p style="font-size: 12px; color: #ffc107; text-align: center; margin-bottom: 10px;">📸 Take a Screenshot of this Player Pass & verify on WhatsApp.</p>
+            <a id="waBtn" href="#" target="_blank" class="btn-wa">📲 Send Pass Screenshot on WhatsApp</a>
+            <button class="btn" onclick="showPage(1)" style="margin-top: 10px; background: transparent; color: #a0aec0; border: 1px solid #333;">Back to Home</button>
+        </div>
+
     </div>
 
 </div>
@@ -165,7 +253,21 @@
 
     function goToPayment() {
         const form = document.getElementById('regForm');
+        const photo = document.getElementById('pPhotoInput').files[0];
+        
+        if(!photo) {
+            alert('Please upload your photo first.');
+            return;
+        }
+
         if(form.checkValidity()) {
+            // Preview player photo on the pass
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('passPhoto').src = e.target.result;
+            }
+            reader.readAsDataURL(photo);
+
             showPage(3);
         } else {
             form.reportValidity();
@@ -177,12 +279,12 @@
         const ss = document.getElementById('ssInput').files[0];
 
         if(!utr || utr.length < 10) {
-            alert('Please enter a valid UTR / Transaction Reference Number.');
+            alert('Please enter a valid UTR Number.');
             return;
         }
 
         if(!ss) {
-            alert('Please attach your payment screenshot before submitting.');
+            alert('Please attach payment screenshot.');
             return;
         }
 
@@ -203,19 +305,27 @@
             body: new FormData(form),
             headers: { 'Accept': 'application/json' }
         }).then(response => {
-            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const randomNum = Math.floor(100000 + Math.random() * 900000);
             const token = 'PPL-' + randomNum;
-            document.getElementById('tokenDisplay').innerText = token;
+            
+            // Populate pass details
+            document.getElementById('passToken').innerText = token;
+            document.getElementById('passName').innerText = document.getElementById('pName').value;
+            document.getElementById('passCity').innerText = document.getElementById('pCity').value;
+            document.getElementById('passRole').innerText = document.getElementById('pRole').value;
+            document.getElementById('passBatting').innerText = document.getElementById('pBatting').value;
+            document.getElementById('passBowling').innerText = document.getElementById('pBowling').value;
 
+            // Prepare WhatsApp direct link
             const pName = document.getElementById('pName').value;
             const regType = document.getElementById('regType').value;
             
-            const waMsg = `Hello, I have registered for PPL.%0A%0A*Name:* ${pName}%0A*Type:* ${regType}%0A*Token:* ${token}%0A*UTR:* ${utr}%0A%0AHere is my payment screenshot:`;
+            const waMsg = `Hello, I registered for PPL.%0A%0A*Name:* ${pName}%0A*Type:* ${regType}%0A*Token:* ${token}%0A*UTR:* ${utr}%0A%0APlease check my attached Player Pass & Payment Screenshot!`;
             document.getElementById('waBtn').href = `https://wa.me/919399840937?text=${waMsg}`;
 
             showPage(4);
         }).catch(error => {
-            alert('Submission failed. Please check internet connection.');
+            alert('Submission failed. Check internet connection.');
         });
     }
 </script>
