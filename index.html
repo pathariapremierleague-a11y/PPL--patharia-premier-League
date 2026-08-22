@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patharia Premier League (PPL)</title>
+    <style>
+        :root {
+            --primary: #ffc107;
+            --bg-color: #0b0f19;
+            --card-bg: #131b2e;
+            --text-light: #f8f9fa;
+            --text-dim: #a0aec0;
+            --border-color: #2d3748;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-light); display: flex; flex-direction: column; align-items: center; padding: 15px 10px; }
+        .container { width: 100%; max-width: 480px; }
+        
+        .page { display: none; animation: slideUp 0.3s ease-in-out; }
+        .active { display: block; }
+
+        .poster-img { width: 100%; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 18px; border-radius: 12px; margin-bottom: 15px; }
+        
+        h1, h2 { color: var(--primary); text-align: center; margin-bottom: 10px; }
+        p { color: var(--text-dim); font-size: 13px; }
+
+        .btn { background: var(--primary); color: #000; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .info-box { background: #0b0f19; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; text-align: center; }
+        .info-box span { font-size: 10px; color: var(--text-dim); text-transform: uppercase; }
+        .info-box h5 { color: var(--primary); font-size: 14px; margin-top: 2px; }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; background: #0b0f19; border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none; box-sizing: border-box; }
+
+        .qr-section { text-align: center; margin: 15px 0; background: #0b0f19; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .qr-img { width: 220px; border-radius: 8px; margin: 10px 0; border: 2px solid var(--primary); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SLIDE 1: HOME PAGE -->
+    <div id="page1" class="page active">
+        <img src="poster.jpg" class="poster-img" alt="PPL Tournament Poster">
+        
+        <div class="card">
+            <h1>Patharia Premier League</h1>
+            <p style="text-align: center; color: #e53e3e; font-weight: bold; margin-bottom: 10px;">AUCTION BASED TOURNAMENT</p>
+            
+            <div class="info-grid">
+                <div class="info-box"><span>FIRST PRIZE 🏆</span><h5>₹1,00,000</h5></div>
+                <div class="info-box"><span>SECOND PRIZE 🏆</span><h5>₹40,000</h5></div>
+                <div class="info-box"><span>FORMAT</span><h5>16 Teams</h5></div>
+                <div class="info-box"><span>MONTH</span><h5>October 2026</h5></div>
+            </div>
+
+            <div class="info-box" style="margin-bottom: 15px;">
+                <span>LOCATION</span>
+                <h5>Patharia, Damoh (M.P.)</h5>
+            </div>
+
+            <button class="btn" onclick="showPage(2)">Register Now</button>
+        </div>
+
+        <div class="card" style="text-align: center;">
+            <p>ORGANIZER CONTACT</p>
+            <h3 style="color: var(--primary); margin: 5px 0;">Viru Ven</h3>
+            <p>📞 9074534603</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: REGISTRATION FORM -->
+    <div id="page2" class="page">
+        <div class="card">
+            <h2>Registration Form</h2>
+            <form action="https://formspree.io/f/xkjwevwz" method="POST" id="regForm">
+                
+                <div class="form-group">
+                    <label>Choose Registration Type *</label>
+                    <select name="Registration_Type" required>
+                        <option value="Senior Player (₹450)">Player Registration: Senior - ₹450</option>
+                        <option value="Junior Player (₹400)">Player Registration: Junior - ₹400</option>
+                        <option value="Team Entry (₹15,000)">Team Entry (16 Teams Battle) - ₹15,000</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Name / Franchise Name *</label>
+                    <input type="text" name="Name" required placeholder="Enter full name">
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp Phone Number *</label>
+                    <input type="tel" name="Phone" required placeholder="10 digit phone number">
+                </div>
+
+                <div class="form-group">
+                    <label>City / Location *</label>
+                    <input type="text" name="City" required placeholder="e.g. Patharia">
+                </div>
+
+                <button type="button" class="btn" onclick="goToPayment()">Continue to Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: PAYMENT PAGE -->
+    <div id="page3" class="page">
+        <div class="card">
+            <h2>Scan & Pay</h2>
+            
+            <div class="qr-section">
+                <p style="color: var(--primary); font-size: 13px;">Scan via PhonePe, GPay or Paytm</p>
+                <img src="qr.jpg" class="qr-img" alt="UPI QR Code">
+                <p style="color: var(--text-light); font-weight: bold;">Payee: KAPIL KURMI</p>
+            </div>
+
+            <div class="form-group">
+                <label>Enter UTR / Transaction Reference Number *</label>
+                <input type="text" id="utrInput" placeholder="12-digit UTR Number" required>
+            </div>
+
+            <button class="btn" onclick="submitFinalForm()">Confirm & Submit</button>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: SUCCESS TOKEN -->
+    <div id="page4" class="page">
+        <div class="card" style="text-align: center; border: 2px dashed var(--primary);">
+            <span style="color: #4ade80; font-size: 14px;">✔ Registration Submitted!</span>
+            <p style="margin-top: 10px;">Your Auction Verification Token:</p>
+            <h1 id="tokenDisplay" style="font-size: 32px; letter-spacing: 2px; margin: 15px 0;">PPL-0000</h1>
+            <p style="font-size: 11px;">Take a screenshot of this token for entry verification.</p>
+            <button class="btn" onclick="showPage(1)" style="margin-top: 15px;">Back to Home</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function showPage(num) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page' + num).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function goToPayment() {
+        const form = document.getElementById('regForm');
+        if(form.checkValidity()) {
+            showPage(3);
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    function submitFinalForm() {
+        const utr = document.getElementById('utrInput').value;
+        if(!utr) {
+            alert('Please enter your UTR / Transaction Reference Number.');
+            return;
+        }
+
+        const form = document.getElementById('regForm');
+        const utrField = document.createElement('input');
+        utrField.type = 'hidden';
+        utrField.name = 'UTR_Number';
+        utrField.value = utr;
+        form.appendChild(utrField);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('tokenDisplay').innerText = 'PPL-' + randomNum;
+            showPage(4);
+        }).catch(error => {
+            alert('Submission failed. Please try again.');
+        });
+    }
+</script>
+
+</body>
+</html>
