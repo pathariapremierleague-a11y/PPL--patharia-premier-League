@@ -28,7 +28,8 @@
         p { color: var(--text-dim); font-size: 13px; }
 
         .btn { background: var(--primary); color: #000; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        
+        .btn-wa { background: #25D366; color: #fff; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; text-decoration: none; display: block; text-align: center; }
+
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
         .info-box { background: #0b0f19; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; text-align: center; }
         .info-box span { font-size: 10px; color: var(--text-dim); text-transform: uppercase; }
@@ -50,7 +51,7 @@
 
     <!-- SLIDE 1: HOME PAGE -->
     <div id="page1" class="page active">
-        <img src="poster.jpg" class="poster-img" alt="PPL Tournament Poster">
+        <img src="poster.jpg" class="poster-img" alt="PPL Tournament Poster" onerror="this.style.display='none'">
         
         <div class="card">
             <h1>Patharia Premier League</h1>
@@ -86,7 +87,7 @@
                 
                 <div class="form-group">
                     <label>Choose Registration Type *</label>
-                    <select name="Registration_Type" required>
+                    <select name="Registration_Type" id="regType" required>
                         <option value="Senior Player (₹450)">Player Registration: Senior - ₹450</option>
                         <option value="Junior Player (₹400)">Player Registration: Junior - ₹400</option>
                         <option value="Team Entry (₹15,000)">Team Entry (16 Teams Battle) - ₹15,000</option>
@@ -95,17 +96,17 @@
 
                 <div class="form-group">
                     <label>Full Name / Franchise Name *</label>
-                    <input type="text" name="Name" required placeholder="Enter full name">
+                    <input type="text" name="Name" id="pName" required placeholder="Enter full name">
                 </div>
 
                 <div class="form-group">
                     <label>WhatsApp Phone Number *</label>
-                    <input type="tel" name="Phone" required placeholder="10 digit phone number">
+                    <input type="tel" name="Phone" id="pPhone" required placeholder="10 digit phone number">
                 </div>
 
                 <div class="form-group">
                     <label>City / Location *</label>
-                    <input type="text" name="City" required placeholder="e.g. Patharia">
+                    <input type="text" name="City" id="pCity" required placeholder="e.g. Patharia">
                 </div>
 
                 <button type="button" class="btn" onclick="goToPayment()">Continue to Payment</button>
@@ -120,27 +121,36 @@
             
             <div class="qr-section">
                 <p style="color: var(--primary); font-size: 13px;">Scan via PhonePe, GPay or Paytm</p>
-                <img src="qr.jpg" class="qr-img" alt="UPI QR Code">
+                <img src="qr.jpg" class="qr-img" alt="UPI QR Code" onerror="this.style.display='none'">
                 <p style="color: var(--text-light); font-weight: bold;">Payee: KAPIL KURMI</p>
             </div>
 
             <div class="form-group">
-                <label>Enter UTR / Transaction Reference Number *</label>
-                <input type="text" id="utrInput" placeholder="12-digit UTR Number" required>
+                <label>12-Digit UTR / Transaction Reference Number *</label>
+                <input type="text" id="utrInput" placeholder="Enter 12-digit UTR Number" required minlength="10" maxlength="16">
             </div>
 
-            <button class="btn" onclick="submitFinalForm()">Confirm & Submit</button>
+            <div class="form-group">
+                <label>Upload Payment Screenshot *</label>
+                <input type="file" id="ssInput" accept="image/*" required style="padding: 8px;">
+            </div>
+
+            <button class="btn" onclick="submitFinalForm()">Submit & Verify Registration</button>
         </div>
     </div>
 
     <!-- SLIDE 4: SUCCESS TOKEN -->
     <div id="page4" class="page">
         <div class="card" style="text-align: center; border: 2px dashed var(--primary);">
-            <span style="color: #4ade80; font-size: 14px;">✔ Registration Submitted!</span>
-            <p style="margin-top: 10px;">Your Auction Verification Token:</p>
+            <span style="color: #4ade80; font-size: 14px;">✔ Registration Saved!</span>
+            <p style="margin-top: 10px;">Your Verification Token Number:</p>
             <h1 id="tokenDisplay" style="font-size: 32px; letter-spacing: 2px; margin: 15px 0;">PPL-0000</h1>
-            <p style="font-size: 11px;">Take a screenshot of this token for entry verification.</p>
-            <button class="btn" onclick="showPage(1)" style="margin-top: 15px;">Back to Home</button>
+            
+            <p style="font-size: 12px; color: #ffc107; margin-bottom: 10px;">⚠️ Final Step: Send payment screenshot on WhatsApp to verify your entry.</p>
+            
+            <a id="waBtn" href="#" target="_blank" class="btn-wa">📲 Send Screenshot on WhatsApp</a>
+
+            <button class="btn" onclick="showPage(1)" style="margin-top: 15px; background: transparent; color: #a0aec0; border: 1px solid #333;">Back to Home</button>
         </div>
     </div>
 
@@ -164,17 +174,29 @@
 
     function submitFinalForm() {
         const utr = document.getElementById('utrInput').value;
-        if(!utr) {
-            alert('Please enter your UTR / Transaction Reference Number.');
+        const ss = document.getElementById('ssInput').files[0];
+
+        if(!utr || utr.length < 10) {
+            alert('Please enter a valid UTR / Transaction Reference Number.');
+            return;
+        }
+
+        if(!ss) {
+            alert('Please attach your payment screenshot before submitting.');
             return;
         }
 
         const form = document.getElementById('regForm');
-        const utrField = document.createElement('input');
-        utrField.type = 'hidden';
-        utrField.name = 'UTR_Number';
+        
+        let utrField = document.getElementById('hiddenUTR');
+        if(!utrField) {
+            utrField = document.createElement('input');
+            utrField.type = 'hidden';
+            utrField.id = 'hiddenUTR';
+            utrField.name = 'UTR_Number';
+            form.appendChild(utrField);
+        }
         utrField.value = utr;
-        form.appendChild(utrField);
 
         fetch(form.action, {
             method: 'POST',
@@ -182,10 +204,18 @@
             headers: { 'Accept': 'application/json' }
         }).then(response => {
             const randomNum = Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('tokenDisplay').innerText = 'PPL-' + randomNum;
+            const token = 'PPL-' + randomNum;
+            document.getElementById('tokenDisplay').innerText = token;
+
+            const pName = document.getElementById('pName').value;
+            const regType = document.getElementById('regType').value;
+            
+            const waMsg = `Hello, I have registered for PPL.%0A%0A*Name:* ${pName}%0A*Type:* ${regType}%0A*Token:* ${token}%0A*UTR:* ${utr}%0A%0AHere is my payment screenshot:`;
+            document.getElementById('waBtn').href = `https://wa.me/919399840937?text=${waMsg}`;
+
             showPage(4);
         }).catch(error => {
-            alert('Submission failed. Please try again.');
+            alert('Submission failed. Please check internet connection.');
         });
     }
 </script>
